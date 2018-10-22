@@ -2,9 +2,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Machine Learning </title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.8/d3.min.js" type="text/JavaScript"></script>
+  <title>Portfolio Optimisation with Tensorflow</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.0"> </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.8/d3.min.js" type="text/JavaScript"></script> -->
+    <script src="http://d3js.org/d3.v4.min.js"></script>
     <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
     <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js">
     </script>
@@ -48,14 +49,14 @@ body {
     align-items: center;
 }
 
-h2, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   color: #5D576B;
   font-family: interstate, sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-p {
+p, label {
   color: #5D576B;
   font-size: 12px;
   font-family: interstate, sans-serif;
@@ -81,7 +82,7 @@ p {
 
 
 .axis line {
-  stroke: #A7C6DA;
+  stroke: #ffffff;
 }
 
 .axis path {
@@ -89,137 +90,317 @@ p {
 }
 
 .axis text {
-  fill: #A7C6DA;
+  fill: #ffffff;
 }
 </style>
 </head>
 
 <body>
+<div class="row" style="height: 15px;">
+</div>
 <div class='row flex'>
   <div class="col-xs-12">
     <div class='row flex'>
     <p>
-      <h2>Look, no hands</h2>
-    </p>
-  </div>
-  <div class='row flex'>
-    <p>
-      <h6>Logistic Regression Classification in plain ole Javascript</h6>
+      <h6>Portfolio Optimisation | Tensorflow </h6>
     </p>
   </div>
   </div>
 </div>
 
-<div class="row" style="height: 15px;">
+<div class="row" style="height: 30px;">
 </div>
 
 
 <div class='row flex'>
-<div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" class="btn btn-outline-secondary btn-sm" id='generate'>Generate Data</button>
-  <button type="button" class="btn btn-outline-secondary btn-sm" id='train'>Train</button>
-  <button type="button" class="btn btn-outline-secondary btn-sm" id='predict'>Predict</button>
+<div class="btn-group" role="group" aria-label="ops">
+  <button type="button" class="btn btn-outline-secondary btn-sm" id='compute'>Compute Sharpe</button>
+  <button type="button" class="btn btn-outline-secondary btn-sm" id='generate'>Generate Efficient Frontier</button>
+  <button type="button" class="btn btn-outline-secondary btn-sm" id='optimise'>Optimise Portfolio</button>
 </div>
 </div>
 
-<div class="row" style="height: 15px;">
+<div class="row" style="height: 20px;">
 </div>
 
-
+<!-- Progress Bar -->
 <div class="row">
-  <div class="col">
-  <div class="progress" style="height: 5px;">
-    <div class="progress-bar  progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
-  </div>
+<div class="col">
+<div class="progress" style="height: 5px;">
+<div class="progress-bar  progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
-
-<div class="row" style="height: 15px;">
 </div>
-
-<div class="row flex">
-
-  <div class="col flex">
-  <div class="input-group input-group-sm mb-3 w-50">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Total Points</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value=100 id='total'>
-  </div>
-  </div>
-
-  <div class="col flex">
-  <div class="input-group input-group-sm mb-3 w-50">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Segment Class</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value=50 id='boundary'>
-  </div>
-  </div>
-
 </div>
+<!--  -->
 
-
-
-<div class="row flex" style="height: 20px;">
-</div>
-<div class="row flex" style="height: 10px;">
-  <p>After training, shift the red point by changing the values from 0 to 500. Then press 'Predict' to check the class.</p>
+<div class="row" style="height: 20px;">
 </div>
 
 <div class="row flex">
 
-  <div class="col flex">
-  <div class="input-group input-group-sm mb-3 w-50">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Point:X</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id='pointX' value=450>
-  </div>
+</div>
+
+<div class="row flex">
+
+<div class="row" style="height: 30px;">
+</div>
+
+<form>
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>ASSETS</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Equities</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Bonds</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Gold</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Cash</p>
+    </div>
   </div>
 
-  <div class="col flex">
-  <div class="input-group input-group-sm mb-3 w-50">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Point:Y</span>
+  <div class="row" style="height: 20px;">
   </div>
-  <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id='pointY' value=450>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>RETS</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.06 id='eqret'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.03 id='bondret'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.035 id='goldret'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.019 id='cashret'>
+    </div>
   </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>VOLS</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.14 id='eqvol'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.06 id='bondvol'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.15 id='goldvol'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.05 id='cashvol'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>SHARPE</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value='' id='eqsharpe'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value='' id='bondsharpe'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value='' id='goldsharpe'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value='' id='cashsharpe'>
+    </div>
   </div>
   
-</div>
-
-
-<div class="row flex">
-
-  <div class="col flex">
-    <h6>Training Accuracy// </h6>
-    <h6 id='accuracy'>~</h6>
+  <div class="row" style="height: 10px;">
   </div>
 
-  <div class="col flex">
-    <h6>Logistic Equation//</h6>
-    <h6 id='accuracy'>$$1\over exp^{-(Ax^1+Bx^2+C)}$$</h6>
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>CORR</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Equities</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Bonds</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Gold</p>
+    </div>
+    <div class="col">
+      <p class='flex'>Cash</p>
+    </div>
   </div>
-  
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>Equities</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='eqeq'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.25 id='eqbond'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.25 id='eqgold'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.1 id='eqcash'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>Bonds</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.25 id='bondeq'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='bondbond'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.1 id='bondgold'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.35 id='bondcash'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>Gold</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.25 id='goldeq'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.1 id='goldbond'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='goldgold'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.1 id='goldcash'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>Cash</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.1 id='casheq'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.35 id='cashbond'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=-0.1 id='cashgold'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='cashcash'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>Floors</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.0 id='flooreq'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.0 id='floorbond'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.0 id='floorgold'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=0.0 id='floorcash'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col">
+      <p class='flex'>Ceilings</p>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='ceileq'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='ceilbond'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='ceilgold'>
+    </div>
+    <div class="col">
+      <input type="text" class="form-control" value=1.0 id='ceilcash'>
+    </div>
+  </div>
+
+</form>
 </div>
 
-
-<div class="row" style="height: 10px;">
+<div class="row" style="height: 25px;">
 </div>
-
-
-
-<div class="row" style="height: 10px;">
+<!-- Progress Bar -->
+<div class="row">
+<div class="col">
+<div class="progress" style="height: 5px;">
+<div class="progress-bar  progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
+</div>
+</div>
+<!--  -->
 
 <div class='row flex'>
-  <div class="col-xs-6" id='p5canvas1'>  
+  <div class="col-xs-4" id='d3canvas3'>  
   </div>
-  <div class="col-xs-6" id='p5canvas2'>
+  <div class="col-xs-4" id='d3canvas2'>  
+  </div>
+  <div class="col-xs-4" id='d3canvas'>  
   </div>
 </div>
-  <script src="./scripts/logregression.js"></script>
+
+<div class="row flex">
+
+  <div class="col flex">
+    <h6>Portfolio Returns :</h6>
+    <h6 id='pfreturn'>...</h6>
+  </div>
+
+  <div class="col flex">
+    <h6>Portfolio Volatility :</h6>
+    <h6 id='pfvol'>...</h6>
+  </div>
+  
+</div>
+
+<!-- <div class='row flex'>
+  <div class="col-xs-12" id='d3canvas3'>  
+  </div>
+</div>
+<div class='row flex'>
+  <div class="col-xs-12" id='d3canvas2'>  
+  </div>
+</div>
+<div class='row flex'>
+  <div class="col-xs-12" id='d3canvas'>  
+  </div>
+</div> -->
+  <script src="./scripts/pfopt.js"></script>
 </body>
 
 </html>

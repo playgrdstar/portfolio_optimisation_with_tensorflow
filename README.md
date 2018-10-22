@@ -1,3 +1,3 @@
-# Building a Logistic Regression Classification Model from Scratch
+# Building a Portfolio Optimisation Model from Tensorflow
 
-Using just Javascript without any machine learning libraries to build a logistic regression model, and visualising the data generation, training and prediction process straight in the client/browser.
+Using Javascript and Tensorflow.js to build a portfolio optimiser with constraints. 
